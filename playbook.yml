@@ -34,7 +34,7 @@
     - name: secrets directory exists
       ansible.builtin.file:
         path: "{{ secrets_dir }}"
-        state: directory
+        state: directory                ## create directory
         owner: apache
         group: apache
         mode: 0500
@@ -90,13 +90,13 @@
     - name: connect to web server with basic auth
       ansible.builtin.uri:
         url: https://serverb.lab.example.com
-        validate_certs: no
-        force_basic_auth: yes
-        user: "{{ web_user }}"
-        password: "{{ web_pass }}"
+        validate_certs: no            ## Note that the certificate is not trusted, so you need to avoid certificate validation.
+        force_basic_auth: yes         ## using basic authentication
+        user: "{{ web_user }}"         ## Use the web_user variable authenticate to the web server
+        password: "{{ web_pass }}"     ## Use the web_pass variable authenticate to the web server
         return_content: yes
         status_code: 200
       register: auth_test
 
     - ansible.builtin.debug:
-        var: auth_test.conten
+        var: auth_test.content          ## print the content returned from the web server, which is contained in the auth_test variable.
